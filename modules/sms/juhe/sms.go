@@ -6,8 +6,8 @@ import (
 	"net/url"
 	"strings"
 
-	"git.code.tencent.com/xinhuameiyu/common/modules/sms/base"
-	"git.code.tencent.com/xinhuameiyu/common/util"
+	"github.com/go-baa/common/modules/sms/base"
+	"github.com/go-baa/common/util"
 	"github.com/go-baa/log"
 	"github.com/go-baa/setting"
 )

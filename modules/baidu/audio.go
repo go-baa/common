@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"git.code.tencent.com/xinhuameiyu/common/util"
-	"git.code.tencent.com/xinhuameiyu/common/util/uuid"
+	"github.com/go-baa/common/util"
+	"github.com/go-baa/common/util/uuid"
 	"github.com/go-baa/log"
 	"github.com/go-baa/setting"
 )

@@ -3,7 +3,7 @@ package ali
 import (
 	"strings"
 
-	"git.code.tencent.com/xinhuameiyu/common/modules/aliyun"
+	"github.com/go-baa/common/modules/aliyun"
 	"github.com/go-baa/log"
 	"github.com/go-baa/setting"
 )

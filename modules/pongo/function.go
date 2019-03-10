@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"git.code.tencent.com/xinhuameiyu/common/util"
+	"github.com/go-baa/common/util"
 	"github.com/go-baa/setting"
 	baa "gopkg.in/baa.v1"
 )

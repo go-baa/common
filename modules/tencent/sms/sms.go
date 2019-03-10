@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	"git.code.tencent.com/xinhuameiyu/common/util"
+	"github.com/go-baa/common/util"
 )
 
 // Sms 短信通知接口

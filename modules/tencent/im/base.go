@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"git.code.tencent.com/xinhuameiyu/common/util"
+	"github.com/go-baa/common/util"
 	// 导入cache的Redis适配器
 	_ "github.com/go-baa/cache/redis"
 )

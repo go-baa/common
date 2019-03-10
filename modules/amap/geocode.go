@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"strings"
 
-	"git.code.tencent.com/xinhuameiyu/common/util"
+	"github.com/go-baa/common/util"
 )
 
 // RegeoParams 逆地理编码 参数

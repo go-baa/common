@@ -5,7 +5,7 @@ import (
 	"strings"
 	"sync"
 
-	"git.code.tencent.com/xinhuameiyu/common/modules/baa/accesslog"
+	"github.com/go-baa/common/modules/baa/accesslog"
 )
 
 const (

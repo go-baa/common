@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"git.code.tencent.com/xinhuameiyu/common/util"
+	"github.com/go-baa/common/util"
 )
 
 const (

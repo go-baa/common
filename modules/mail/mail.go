@@ -9,7 +9,7 @@ import (
 	"net/smtp"
 	"strings"
 
-	"git.code.tencent.com/xinhuameiyu/common/modules/mail/ali"
+	"github.com/go-baa/common/modules/mail/ali"
 	"github.com/go-baa/log"
 	"github.com/go-baa/setting"
 	baa "gopkg.in/baa.v1"

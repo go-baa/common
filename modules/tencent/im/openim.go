@@ -6,7 +6,7 @@ import (
 
 	"time"
 
-	"git.code.tencent.com/xinhuameiyu/common/util"
+	"github.com/go-baa/common/util"
 )
 
 // ServiceOpenIM 消息服务名

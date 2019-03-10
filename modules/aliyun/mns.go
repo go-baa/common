@@ -10,7 +10,7 @@ import (
 	"sort"
 	"strings"
 
-	"git.code.tencent.com/xinhuameiyu/common/util"
+	"github.com/go-baa/common/util"
 	"gopkg.in/baa.v1"
 )
 

@@ -3,8 +3,8 @@ package qcloud
 import (
 	"fmt"
 
-	"git.code.tencent.com/xinhuameiyu/common/modules/sms/base"
-	"git.code.tencent.com/xinhuameiyu/common/modules/tencent/sms"
+	"github.com/go-baa/common/modules/sms/base"
+	"github.com/go-baa/common/modules/tencent/sms"
 	"github.com/go-baa/log"
 	"github.com/go-baa/setting"
 )

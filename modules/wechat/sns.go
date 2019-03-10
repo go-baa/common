@@ -3,7 +3,7 @@ package wechat
 import (
 	"encoding/json"
 
-	"git.code.tencent.com/xinhuameiyu/common/util"
+	"github.com/go-baa/common/util"
 	"github.com/go-baa/log"
 )
 

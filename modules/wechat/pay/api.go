@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"git.code.tencent.com/xinhuameiyu/common/util"
+	"github.com/go-baa/common/util"
 	"github.com/go-baa/log"
 	"github.com/go-baa/setting"
 )

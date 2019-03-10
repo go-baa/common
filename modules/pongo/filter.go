@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"strings"
 
-	"git.code.tencent.com/xinhuameiyu/common/util"
+	"github.com/go-baa/common/util"
 	"github.com/micate/pongo2"
 	"gopkg.in/baa.v1"
 )

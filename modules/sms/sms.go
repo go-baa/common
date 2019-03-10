@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"time"
 
-	_ "git.code.tencent.com/xinhuameiyu/common/modules/sms/aliyun"
-	"git.code.tencent.com/xinhuameiyu/common/modules/sms/base"
-	_ "git.code.tencent.com/xinhuameiyu/common/modules/sms/juhe"
-	_ "git.code.tencent.com/xinhuameiyu/common/modules/sms/qcloud"
+	_ "github.com/go-baa/common/modules/sms/aliyun"
+	"github.com/go-baa/common/modules/sms/base"
+	_ "github.com/go-baa/common/modules/sms/juhe"
+	_ "github.com/go-baa/common/modules/sms/qcloud"
 	"github.com/go-baa/log"
 )
 
