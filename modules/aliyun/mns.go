@@ -10,8 +10,8 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/go-baa/baa"
 	"github.com/go-baa/common/util"
-	"gopkg.in/baa.v1"
 )
 
 type MNSNotification struct {

@@ -9,10 +9,10 @@ import (
 	"net/smtp"
 	"strings"
 
+	"github.com/go-baa/baa"
 	"github.com/go-baa/common/modules/mail/ali"
 	"github.com/go-baa/log"
 	"github.com/go-baa/setting"
-	baa "gopkg.in/baa.v1"
 )
 
 // Config 邮件配置

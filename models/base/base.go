@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/go-baa/baa"
 	"github.com/go-baa/cache"
 	"github.com/go-baa/log"
 	"github.com/go-baa/setting"
@@ -14,7 +15,6 @@ import (
 
 	// 导入mysql驱动
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	baa "gopkg.in/baa.v1"
 )
 
 // MapParams 声明一个通用的参数结构

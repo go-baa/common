@@ -8,9 +8,9 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/go-baa/baa"
 	"github.com/go-baa/common/util"
 	"github.com/go-baa/setting"
-	baa "gopkg.in/baa.v1"
 )
 
 // 解析VUE构建文件

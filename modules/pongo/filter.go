@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"strings"
 
+	"github.com/go-baa/baa"
 	"github.com/go-baa/common/util"
 	"github.com/micate/pongo2"
-	"gopkg.in/baa.v1"
 )
 
 // Filters ...

@@ -15,12 +15,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/go-baa/baa"
 	"github.com/go-baa/common/modules/assets"
 	"github.com/go-baa/common/modules/errors"
 	"github.com/go-baa/common/util"
 	"github.com/go-baa/log"
 	"github.com/go-baa/setting"
-	"gopkg.in/baa.v1"
 )
 
 // NormalReturn 标准返回格式
