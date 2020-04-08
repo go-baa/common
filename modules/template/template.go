@@ -55,6 +55,14 @@ func Funcs(b *baa.Baa) template.FuncMap {
 		"strcut": func(length int, dot string, str string) template.HTML {
 			return template.HTML(util.StrNatCut(str, length, dot))
 		},
+		"strcutnodot": func(length int, str string) template.HTML {
+			str = util.StrNatCut(str, length, "")
+			str = strings.TrimRight(str, "。")
+			str = strings.TrimRight(str, "，")
+			str = strings.TrimRight(str, ",")
+			str = strings.TrimRight(str, ".")
+			return template.HTML(str)
+		},
 		"trim": func(s string) string {
 			return strings.TrimSpace(s)
 		},

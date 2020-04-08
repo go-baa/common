@@ -76,8 +76,8 @@ func (t *Consul) ServiceRegisger(id, name, addr, port string, tags []string) err
 	}
 
 	check := &api.AgentServiceCheck{
-		Status: "passing",
-		TTL:    "30s",
+		Status:                         "passing",
+		TTL:                            "30s",
 		DeregisterCriticalServiceAfter: "2h",
 	}
 	service := &api.AgentServiceRegistration{

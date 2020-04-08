@@ -40,12 +40,13 @@ func New(clientID, clientSecret string) (*Baidu, error) {
 
 // AccessToken 授权秘钥
 type AccessToken struct {
-	AccessToken      string `json:"access_token"`
+	AccessToken      string `json:"access_token"`  // 获取到的网页授权接口调用凭证
+	ExpiresIn        int64  `json:"expires_in"`    // 凭证有效时间，单位：秒
+	RefreshToken     string `json:"refresh_token"` // 用于刷新access_token
+	Openid           string `json:"openid"`        // 用户唯一标识
+	Scope            string `json:"scope"`         // 用户授权权限，如：snsapi_userinfo，多个空格分隔
 	SessionKey       string `json:"session_key"`
-	Scope            string `json:"scope"`
-	RefreshToken     string `json:"refresh_token"`
 	SessionSecret    string `json:"session_secret"`
-	ExpiresIn        int64  `json:"expires_in"`
 	Error            string `json:"error"`
 	ErrorDescription string `json:"error_description"`
 }

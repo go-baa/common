@@ -12,8 +12,6 @@ import (
 	"github.com/go-baa/log"
 	"github.com/go-baa/setting"
 	"github.com/jinzhu/gorm"
-
-	// 导入mysql驱动
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
@@ -122,6 +120,11 @@ func NewDB(db *gorm.DB, tx bool) *DB {
 		return &DB{db, nil, true, 0}
 	}
 	return &DB{db, nil, false, 0}
+}
+
+// SetLogger 设置日志
+func (t *DB) SetLogger(date string) {
+	setLogger(t.DB, date)
 }
 
 // Begin 开启事务

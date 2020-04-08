@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	baa "github.com/go-baa/baa"
+	"github.com/go-baa/baa"
 )
 
 // DefaultFlushTTL 日志缓存时间，单位：秒

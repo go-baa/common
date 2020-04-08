@@ -13,7 +13,13 @@ const (
 	KC_RAND_KIND_ALL   = 3 // 数字、大小写字母
 )
 
-// 随机字符串
+// RandInt 随机数
+func RandInt(max int) int {
+	rand.Seed(time.Now().UnixNano())
+	return rand.Intn(max)
+}
+
+// RandStr 随机字符串
 func RandStr(size int, kind int) []byte {
 	ikind, kinds, result := kind, [][]int{{10, 48}, {26, 97}, {26, 65}}, make([]byte, size)
 	is_all := kind > 2 || kind < 0

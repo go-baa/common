@@ -3,8 +3,13 @@ package util
 import (
 	"bytes"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"strconv"
 	"strings"
+
+	"golang.org/x/text/encoding/simplifiedchinese"
+	"golang.org/x/text/transform"
 )
 
 const (
@@ -169,7 +174,7 @@ func StrPad(v interface{}, length int, pad string, padType int) string {
 	return s
 }
 
-// StrNatCut 字符串截取，中文算一个 英文算两个
+// StrNatCut 字符串截取，中文算一个 英文也算一个
 func StrNatCut(s string, length int, dots ...string) string {
 	source := []rune(s)
 	n := len(source)
@@ -184,6 +189,102 @@ func StrNatCut(s string, length int, dots ...string) string {
 	dst := make([]rune, length)
 	copy(dst, source)
 	return fmt.Sprintf("%s%s", string(dst), dots[0])
+}
+
+// StrNatCutGBK 字符串截取，中文算两个 英文算一个
+func StrNatCutGBK(s string, length int, dots ...string) string {
+	var l int
+	source := []rune(s)
+	for i, c := range source {
+		l = i
+		if length <= 0 {
+			break
+		}
+		if c > 256 {
+			length--
+		}
+		length--
+	}
+
+	if l == len(source)-1 {
+		l++
+		dots = []string{""}
+	} else {
+		if dots == nil {
+			dots = []string{"..."}
+		}
+	}
+	return fmt.Sprintf("%s%s", string(source[:l]), dots[0])
+}
+
+// StrNatCutNature 字符串截取，无论中英文一个字符算文算一个，可以指定是否要截取最后一个句号
+func StrNatCutNature(s string, length int, lastDot bool) string {
+	source := []rune(s)
+	l := len(source)
+	// 不足长度
+	if l <= length {
+		return s
+	}
+	// 截取
+	s2 := string(source[:length])
+	// 查找最后一个句号
+	if lastDot {
+		// 最后刚好就是句号
+		if source[length-1] == '”' {
+			return s2
+		}
+		if source[length-1] == '。' {
+			return s2
+		}
+		if source[length-1] == '.' {
+			return s2
+		}
+		pos := strings.LastIndex(s2, "。")
+		if pos > 0 && pos > length-50 {
+			s2 = fmt.Sprintf("%s。", s2[:pos])
+		}
+	}
+	return s2
+}
+
+// UTF8ToGBK 转换成GBK编码
+func UTF8ToGBK(s string) (string, error) {
+	transformer := simplifiedchinese.GBK.NewEncoder()
+	src := []byte(s)
+	lSrc := len(src)
+	dst := make([]byte, lSrc)
+	gotBuf := make([]byte, 0, lSrc)
+	repeat := false
+	for {
+		nDst, nSrc, err := transformer.Transform(dst, src, true)
+		gotBuf = append(gotBuf, dst[:nDst]...)
+		if repeat {
+			log.Printf("in times err: %v", err)
+		}
+		if err != nil {
+			repeat = true
+			log.Printf("src: %s", src)
+			log.Printf("lSrc=%d, nSrc=%d, err: %v", lSrc, nSrc, err)
+			src = src[nSrc+1:]
+			dst = make([]byte, len(src))
+		} else {
+			if nSrc == len(src) {
+				break
+			}
+		}
+	}
+
+	return string(gotBuf), nil
+}
+
+// GBKToUTF8 GBK转换成UTF-8编码
+func GBKToUTF8(s string) (string, error) {
+	b := transform.NewReader(
+		bytes.NewReader([]byte(s)),
+		simplifiedchinese.GBK.NewDecoder(),
+	)
+	ss, err := ioutil.ReadAll(b)
+	return string(ss), err
 }
 
 // PurgeText 纯净的文本，不带html标签，没有换行，没有制表符
@@ -202,6 +303,7 @@ func PurgeText(s string) string {
 	s = strings.Replace(s, "&tilde;", "", -1)
 	s = strings.Replace(s, "&mdash;", "", -1)
 	s = strings.Replace(s, "&ndash;", "", -1)
+	s = strings.Replace(s, "\"", "", -1)
 	return s
 }
 

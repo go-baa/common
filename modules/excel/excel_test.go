@@ -22,7 +22,7 @@ func TestExcelRead1(t *testing.T) {
 			&HeaderColumn{Field: "Address", Title: "地址"},
 			&HeaderColumn{Field: "Zip", Title: "邮编"},
 			&HeaderColumn{Field: "Description", Title: "描述"},
-		}, 0)
+		}, 0, false)
 
 		So(err, ShouldBeNil)
 
@@ -37,7 +37,7 @@ func TestExcelRead2(t *testing.T) {
 			&HeaderColumn{Field: "Name", Title: "店面名称"},
 			&HeaderColumn{Field: "Concact", Title: "店长2", Require: true},
 			&HeaderColumn{Field: "Mobile", Title: "手机"},
-		}, 0)
+		}, 0, false)
 
 		So(err, ShouldNotBeNil)
 		So(e, ShouldBeNil)
@@ -52,7 +52,7 @@ func TestExcelRead3(t *testing.T) {
 			&HeaderColumn{Field: "Mobile", Title: "手机号"},
 			&HeaderColumn{Field: "Sex", Title: "性别"},
 			&HeaderColumn{Field: "Address", Title: "地址"},
-		}, 0)
+		}, 0, false)
 
 		So(err, ShouldBeNil)
 
@@ -75,7 +75,7 @@ func TestExcelRead4(t *testing.T) {
 			&HeaderColumn{Field: "Mobile", Title: "手机号"},
 			&HeaderColumn{Field: "Sex", Title: "性别"},
 			&HeaderColumn{Field: "Address", Title: "地址"},
-		}, 3)
+		}, 3, false)
 
 		So(err, ShouldBeNil)
 
@@ -106,7 +106,7 @@ func TestExcelRead5(t *testing.T) {
 			&HeaderColumn{Field: "optione", Title: "选项E"},
 			&HeaderColumn{Field: "optionf", Title: "选项F"},
 			&HeaderColumn{Field: "optiong", Title: "选项G"},
-		}, 10)
+		}, 10, false)
 
 		So(err, ShouldBeNil)
 

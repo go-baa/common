@@ -2,6 +2,7 @@ package util
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -20,6 +21,9 @@ import (
 func HTTPGet(uri string, timeout int) ([]byte, error) {
 	client := &http.Client{
 		Timeout: time.Second * time.Duration(timeout),
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
 	}
 	resp, err := client.Get(uri)
 	if err != nil {
@@ -35,8 +39,11 @@ func HTTPPost(uri string, params map[string]string, timeout int, header map[stri
 	for k, v := range params {
 		udata[k] = []string{v}
 	}
-	client := http.Client{
+	client := &http.Client{
 		Timeout: time.Second * time.Duration(timeout),
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
 	}
 	req, err := http.NewRequest("POST", uri, strings.NewReader(udata.Encode()))
 	if err != nil {
@@ -67,8 +74,11 @@ func HTTPPostJSON(uri string, params interface{}, timeout int) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	client := http.Client{
+	client := &http.Client{
 		Timeout: time.Second * time.Duration(timeout),
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
 	}
 	resp, err := client.Post(uri, "application/json", buf)
 	if err != nil {

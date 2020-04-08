@@ -36,6 +36,11 @@ func (t urlValue) Sort() {
 	sort.Sort(t)
 }
 
+// SortParams 获取一个排序的string参数列表
+func SortParams(params map[string]interface{}) []urlValueItem {
+	return urlParamSort(params)
+}
+
 func urlParamSort(mapItems map[string]interface{}) []urlValueItem {
 	ns := make(urlValue, 0, len(mapItems))
 	for k, v := range mapItems {

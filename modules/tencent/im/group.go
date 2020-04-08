@@ -658,16 +658,16 @@ func (t *IM) SendGroupMsg(groupID, from string, msg []*MsgBodyItem, pushInfo *Of
 
 // SystemNotificationRequest 系统通知请求
 type SystemNotificationRequest struct {
-	GroupID         string   `json:"GroupId"` // 群组ID
-	Content         string   // 系统通知内容
+	GroupID          string   `json:"GroupId"` // 群组ID
+	Content          string   // 系统通知内容
 	ToMembersAccount []string `json:"ToMembers_Account,omitempty"` // 接收者群成员列表，不填或为空表示全员下发
 }
 
 // SendGroupSystemNotification 在群组中发送系统通知
 func (t *IM) SendGroupSystemNotification(groupID, content string, toAccounts []string) error {
 	req := &SystemNotificationRequest{
-		GroupID:         groupID,
-		Content:         content,
+		GroupID: groupID,
+		Content: content,
 	}
 	if len(toAccounts) > 0 {
 		req.ToMembersAccount = toAccounts

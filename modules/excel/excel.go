@@ -83,7 +83,8 @@ func NewWriter() (*Excel, error) {
 // NewReader 创建一个Excel读操作实例
 // 接受的 header 为表头和字段映射关系，如：{Field: "title", Title: "标题", Requre: true}
 // headerlineNum 表头行号是第几行，默认是第1行
-func NewReader(file string, header []*HeaderColumn, headerlineNum int) (*Excel, error) {
+// igoreNewLine 如果表头有换行，是否删除掉换行以后的字符
+func NewReader(file string, header []*HeaderColumn, headerlineNum int, igoreNewLine bool) (*Excel, error) {
 	if len(header) == 0 {
 		return nil, errors.New("Excel.NewReader 错误: 表头不能为空")
 	}
@@ -109,7 +110,7 @@ func NewReader(file string, header []*HeaderColumn, headerlineNum int) (*Excel, 
 		return nil, errors.New("Excel.NewReader 错误: 表格中没有数据")
 	}
 	// 检测表头
-	err = t.checkHeader()
+	err = t.checkHeader(igoreNewLine)
 	if err != nil {
 		return nil, err
 	}
@@ -119,7 +120,8 @@ func NewReader(file string, header []*HeaderColumn, headerlineNum int) (*Excel, 
 
 // checkHeader 读模式下，检测表头是否和要求的字段一致
 // fieldsMap 初始化所有的字段，默认为false,后面发现一个即设为true,到最后如果还有false,那么字段不匹配
-func (t *Excel) checkHeader() error {
+// igoreNewLine 是否将表头中的换行下面的内容忽略
+func (t *Excel) checkHeader(igoreNewLine bool) error {
 	header := make(map[string]string)
 	fieldsMap := make(map[string]*HeaderColumn)
 	for _, column := range t.header {
@@ -136,9 +138,18 @@ func (t *Excel) checkHeader() error {
 	// 获取所有表头对应的字段，并加入字段列表，同时验证字段是否存在
 	var v string
 	var ok bool
+	headerText := make([]string, 0)
 	for i, cell := range headerRow.Cells {
-		cellText, _ := cell.String()
+		cellText := cell.String()
 		cellText = strings.TrimSpace(cellText)
+		if igoreNewLine {
+			if pos := strings.Index(cellText, "\n"); pos > 0 {
+				cellText = cellText[:pos]
+			}
+		}
+		cellText = strings.Replace(cellText, "\n", "", -1)
+		cellText = strings.TrimSpace(cellText)
+		headerText = append(headerText, cellText)
 		v, ok = header[cellText]
 		if cellText == "" || ok == false {
 			v = strconv.Itoa(i)
@@ -152,6 +163,7 @@ func (t *Excel) checkHeader() error {
 	// 验证是否所有的字段，都读到了
 	for _, column := range fieldsMap {
 		if column != nil && column.Require {
+			fmt.Printf("Excel.CheckHeader 错误：所有的表头如下：\n%v\n", headerText)
 			return errors.New("Excel.CheckHeader 错误: 表头中的列 " + column.Title + " 在文件中不存在")
 		}
 	}
@@ -182,7 +194,7 @@ func (t *Excel) Fetch() (MapValue, error) {
 	blank := true
 	row := make(MapValue)
 	for i, cell := range t.file.Sheets[0].Rows[t.rowi].Cells {
-		v, _ := cell.String()
+		v := cell.String()
 		v = strings.TrimSpace(v)
 		if blank && len(v) > 0 {
 			blank = false

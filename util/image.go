@@ -1,6 +1,8 @@
 package util
 
 import (
+	"encoding/hex"
+	"errors"
 	"fmt"
 	"image"
 	"image/color"
@@ -18,7 +20,13 @@ import (
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/gofont/gomono"
 	"golang.org/x/image/math/fixed"
+	"golang.org/x/image/riff"
+	"golang.org/x/image/tiff"
+	"golang.org/x/image/webp"
 )
+
+// ErrNotSupportFromat 不支持的格式
+var ErrNotSupportFromat = errors.New("only support jpeg,png,gif,webp")
 
 // Scale 缩放图像
 // 参数：src 原始图像路径，dst 目标图像路径，如果为空或相同则覆盖原始文件，w,h 为缩放后的宽高
@@ -135,7 +143,7 @@ func Scale(src, dst string, w, h int, equalRate bool, cut bool) error {
 	// 导出
 	switch ext {
 	case ".jpg", ".jpeg":
-		err = jpeg.Encode(f, imgDst, &jpeg.Options{Quality: 75})
+		err = jpeg.Encode(f, imgDst, &jpeg.Options{Quality: 95})
 	case ".png":
 		encoder := png.Encoder{
 			CompressionLevel: png.BestCompression,
@@ -219,6 +227,156 @@ func ImageCut(src, dst string, x, y, w, h int) error {
 		err = fmt.Errorf("unknown output image type")
 	}
 	return err
+}
+
+//ImageCutWithFormat 图像裁剪 无后缀输出jpg
+func ImageCutWithFormat(src, dst string, x, y, w, h int) error {
+	f, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+
+	format, err := ImageFormatDiscernment(f)
+	if err != nil {
+		return err
+	}
+	var imgSrc image.Image
+	switch format {
+	case "JPEG":
+		imgSrc, err = jpeg.Decode(f)
+	case "PNG":
+		imgSrc, err = png.Decode(f)
+	case "GIF":
+		imgSrc, err = gif.Decode(f)
+	case "TIFF":
+		imgSrc, err = tiff.Decode(f)
+	case "WEBP":
+		imgSrc, err = webp.Decode(f)
+	default:
+		err = ErrNotSupportFromat
+	}
+	f.Close()
+	if err != nil {
+		return err
+	}
+
+	if dst == "" || dst == src {
+		dst = src
+	}
+	f, err = os.OpenFile(dst, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0666)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	ext := filepath.Ext(dst)
+	// 判断导出图片格式是否支持
+	switch ext {
+	case ".jpg", ".jpeg", "":
+		err = nil
+	case ".png":
+		err = nil
+	case ".gif":
+		err = nil
+	}
+
+	// 裁剪图片，输出目标尺寸
+	imgDst := image.NewRGBA(image.Rect(0, 0, w, h))
+	draw.Draw(imgDst, imgDst.Bounds(), imgSrc, image.Point{x, y}, draw.Src)
+
+	// 导出
+	switch ext {
+	case ".jpg", ".jpeg", "":
+		err = jpeg.Encode(f, imgDst, &jpeg.Options{Quality: 75})
+	case ".png":
+		encoder := png.Encoder{
+			CompressionLevel: png.BestCompression,
+		}
+		err = encoder.Encode(f, imgDst)
+	case ".gif":
+		err = gif.Encode(f, imgDst, nil)
+	default:
+		err = jpeg.Encode(f, imgDst, &jpeg.Options{Quality: 75})
+	}
+	return err
+}
+
+// ImageFormatDiscernment 识别格式
+func ImageFormatDiscernment(f *os.File) (string, error) {
+	head := make([]byte, 8)
+	_, err := f.ReadAt(head, 0)
+	if err != nil {
+		return "", err
+	}
+	headStr := strings.ToUpper(hex.EncodeToString(head))
+	_, err = f.Seek(0, 0)
+	if err != nil {
+		return "", err
+	}
+
+	format := ""
+	if strings.HasPrefix(headStr, "FFD8") {
+		format = "JPEG"
+	} else if strings.HasPrefix(headStr, "89504E470D0A1A0A") {
+		format = "PNG"
+	} else if strings.HasPrefix(headStr, "474946383961") || strings.HasPrefix(headStr, "474946383761") {
+		format = "GIF"
+	} else if strings.HasPrefix(headStr, "4D4D") || strings.HasPrefix(headStr, "4949") {
+		format = "TIFF"
+	} else if strings.HasPrefix(headStr, "52494646") {
+		fccWEBP := riff.FourCC{'W', 'E', 'B', 'P'}
+		formType, _, err := riff.NewReader(f)
+		f.Seek(0, 0)
+		if err == nil {
+			if formType == fccWEBP {
+				format = "WEBP"
+			}
+		} else {
+			err = ErrNotSupportFromat
+		}
+	} else {
+		err = ErrNotSupportFromat
+	}
+
+	if err != nil {
+		return "", err
+	}
+	return format, nil
+}
+
+// ImageSizeWithFormat 返回一个图片的宽和高
+func ImageSizeWithFormat(file string) (width int, height int, err error) {
+	f, err := os.Open(file)
+	if err != nil {
+		return 0, 0, err
+	}
+
+	format, err := ImageFormatDiscernment(f)
+	if err != nil {
+		return 0, 0, err
+	}
+	var img image.Image
+	switch format {
+	case "JPEG":
+		img, err = jpeg.Decode(f)
+	case "PNG":
+		img, err = png.Decode(f)
+	case "GIF":
+		img, err = gif.Decode(f)
+	case "TIFF":
+		img, err = tiff.Decode(f)
+	case "WEBP":
+		img, err = webp.Decode(f)
+	default:
+		err = ErrNotSupportFromat
+	}
+	f.Close()
+	if err != nil {
+		return 0, 0, err
+	}
+
+	bounds := img.Bounds()
+	return bounds.Dx(), bounds.Dy(), nil
 }
 
 // ImageSize 返回一个图片的宽和高
