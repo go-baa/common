@@ -21,7 +21,7 @@ require (
 	github.com/micate/pongo2 v0.0.0-20161024101402-ee379b257b86
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742 // indirect
-	github.com/mozillazg/go-pinyin v0.16.0
+	github.com/mozillazg/go-pinyin v0.19.0
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/nsqio/go-nsq v1.0.8
 	github.com/onsi/ginkgo v1.12.0 // indirect
